@@ -3,6 +3,9 @@ import { ethers } from "ethers";
 import Head from "next/head";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, Input, Text, Textarea } from "@chakra-ui/react";
+import { faMugHot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -160,95 +163,113 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Buy Warlock a Coffee!</title>
-        <meta name="description" content="Tipping site" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Box>
+      <Box
+        bgGradient={["linear(to-b, orange.100, orange.600)"]}
+        className={styles.container}
+      >
+        <Head>
+          <title>Buy Warlock a Coffee!</title>
+          <meta name="description" content="Tipping site" />
+        </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Buy Warlock a Coffee!</h1>
+        <Box className={styles.main}>
+          <Text
+            fontWeight={700}
+            fontSize={60}
+            alignSelf="center"
+            sx={{ zIndex: 10, position: "relative" }}
+          >
+            Buy Warlock a Coffee!
+          </Text>
 
-        {currentAccount ? (
-          <div>
-            <form>
-              <div>
-                <label>Name</label>
+          {currentAccount ? (
+            <div>
+              <form>
+                <div>
+                  <Text>Name</Text>
+                  <Input
+                    borderColor="orange.600"
+                    _hover={{ borderColor: "orange.800" }}
+                    focusBorderColor="orange.800"
+                    _placeholder={{ opacity: 0.4, color: "orange.800" }}
+                    id="name"
+                    placeholder="anon"
+                    onChange={onNameChange}
+                  />
+                </div>
                 <br />
-
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="anon"
-                  onChange={onNameChange}
-                />
-              </div>
-              <br />
-              <div>
-                <label>Send Warlock a message</label>
-                <br />
-
-                <textarea
-                  rows={3}
-                  placeholder="Enjoy your coffee!"
-                  id="message"
-                  onChange={onMessageChange}
-                  required
-                ></textarea>
-              </div>
-              <div style={{ flexDirection: "row" }}>
-                <div style={{ paddingBottom: "5px", paddingTop: "20px" }}>
-                  <button
-                    type="button"
+                <Grid flexDirection="row" gap={3}>
+                  <Text>Send Warlock a message</Text>
+                  <Textarea
+                    borderColor="orange.600"
+                    _hover={{ borderColor: "orange.800" }}
+                    focusBorderColor="orange.800"
+                    placeholder="Enjoy your coffee!"
+                    id="message"
+                    _placeholder={{ opacity: 0.4, color: "orange.800" }}
+                    onChange={onMessageChange}
+                    resize="none"
+                    required
+                  />
+                  <Button
+                    leftIcon={<FontAwesomeIcon icon={faMugHot} size="lg" />}
+                    colorScheme="orange"
                     onClick={() => {
                       buyCoffee("0.001");
                     }}
                   >
                     Send 1 Coffee for 0.001ETH
-                  </button>
-                </div>
-                <div>
-                  <button
-                    type="button"
+                  </Button>
+                  <Button
+                    leftIcon={<FontAwesomeIcon icon={faMugHot} size="2x" />}
+                    colorScheme="orange"
                     onClick={() => {
                       buyCoffee("0.003");
                     }}
                   >
                     Send 1 Large Coffee for 0.003ETH
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        ) : (
-          <button onClick={connectWallet}> Connect your wallet </button>
-        )}
-      </main>
-
-      {currentAccount && <h1>Memos received</h1>}
-
-      {currentAccount &&
-        memos.map((memo, idx) => {
-          return (
-            <div
-              key={idx}
-              style={{
-                border: "2px solid",
-                borderRadius: "5px",
-                padding: "5px",
-                margin: "5px",
-              }}
-            >
-              <p style={{ fontWeight: "bold" }}>"{memo.message}"</p>
-              <p>
-                From: {memo.name} at {memo.timestamp.toString()}
-              </p>
+                  </Button>
+                </Grid>
+              </form>
             </div>
-          );
-        })}
+          ) : (
+            <Button
+              variant="solid"
+              colorScheme="orange"
+              onClick={connectWallet}
+            >
+              Connect your wallet
+            </Button>
+          )}
+        </Box>
 
-      <footer className={styles.footer}>
+        {currentAccount && <Text fontSize={40}>Memos received</Text>}
+
+        {currentAccount &&
+          memos
+            .map((memo, idx) => {
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    border: "2px solid",
+                    borderRadius: "5px",
+                    padding: "5px",
+                    margin: "5px",
+                  }}
+                >
+                  <Text>"{memo.message}"</Text>
+                  <Text>
+                    From: {memo.name} at {memo.timestamp.toString()}
+                  </Text>
+                </div>
+              );
+            })
+            .reverse()}
+      </Box>
+
+      <Box bgColor="orange.600" className={styles.footer}>
         <a
           href="https://alchemy.com/?a=roadtoweb3weektwo"
           target="_blank"
@@ -256,7 +277,7 @@ export default function Home() {
         >
           Created by @0xW4r10ck for Alchemy's Road to Web3 lesson two!
         </a>
-      </footer>
-    </div>
+      </Box>
+    </Box>
   );
 }
